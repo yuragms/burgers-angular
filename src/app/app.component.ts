@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
+import {AppService} from "./app.service";
+
 
 @Component({
   selector: 'app-root',
@@ -10,12 +12,12 @@ export class AppComponent {
   currency = "$";
 
   form = this.fb.group({
-    order:["", Validators.required],
-    name:["", Validators.required],
-    phone:["", Validators.required],
+    order: ["", Validators.required],
+    name: ["", Validators.required],
+    phone: ["", Validators.required],
   });
 
-  productsData=[
+  productsData = [
     {
       image: "1.png",
       title: "Бургер чеддер & бекон",
@@ -112,21 +114,34 @@ export class AppComponent {
       basePrice: 9,
       grams: 360
     },
-    ]
-  constructor(private fb: FormBuilder) {
+  ]
+
+  constructor(private fb: FormBuilder, private appService: AppService) {
   }
+
   scrollTo(target: HTMLElement, burger?: any) {
     target.scrollIntoView({behavior: "smooth"});
     if (burger) {
       this.form.patchValue({order: burger.title + ' (' + burger.price + ' ' + this.currency + ')'});
     }
   }
+
   confirmOrder() {
-    if(this.form.valid) {
-      alert("Спасибо за заказ! Мы скоро свяжемся с вами");
-      this.form.reset();
+    if (this.form.valid) {
+      this.appService.sendOrder(this.form.value)
+        .subscribe(
+          {
+        next: (response: any) => {
+          alert(response.message);
+          this.form.reset();
+        },
+        error: (response) => {
+          alert(response.error.message);
+        },
+      })
     }
   }
+
   changeCurrency() {
 
     let newCurrency = "$";
