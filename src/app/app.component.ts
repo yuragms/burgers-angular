@@ -10,6 +10,8 @@ import {AppService} from "./app.service";
 })
 export class AppComponent {
   currency = "$";
+  // loaderShowed = true;
+  // loader = true;
   loaderShowed = true;
   loader = true;
 
@@ -133,11 +135,17 @@ export class AppComponent {
   }
 
   ngOnInit(){
-    setTimeout(()=>{
+    // setTimeout(()=>{
+    //   this.loaderShowed = false;
+    // }, 3000);
+    // setTimeout(()=>{
+    //   this.loader =false;
+    // }, 4000);
+    setTimeout(() => {
       this.loaderShowed = false;
     }, 3000);
-    setTimeout(()=>{
-      this.loader =false;
+    setTimeout(() => {
+      this.loader = false;
     }, 4000);
     this.appService.getData().subscribe(data => this.productsData = data);
   }
